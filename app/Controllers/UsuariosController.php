@@ -6,7 +6,7 @@ class UsuariosController
 
     public function __construct()
     {
-        require 'config/database.php';
+        require __DIR__ . '/../../config/database.php';
         $this->pdo = $pdo;
     }
 
@@ -26,7 +26,7 @@ class UsuariosController
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        $id = filter_input('INPUT_GET', 'id', FILTER_VALIDATE_INT);
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if (!$id) {
             http_response_code(400);
             echo json_encode(['error' => 'ID inválido']);
@@ -123,7 +123,7 @@ class UsuariosController
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        $id = filter_input('INPUT_POST', 'id', FILTER_VALIDATE_INT);
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $nome = trim($_POST['nome'] ?? '');
         $email = trim($_POST['email'] ?? '');
         $perfil = $_POST['perfil'] ?? 'atendente';
@@ -186,7 +186,7 @@ class UsuariosController
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        $id =  filter_input('INPUT_POST', 'id', FILTER_VALIDATE_INT);
+        $id =  filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
         if (!$id) {
             http_response_code(400);
