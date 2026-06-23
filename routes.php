@@ -4,8 +4,8 @@ require_once __DIR__ . '/app/Controllers/UsuariosController.php';
 require_once __DIR__ . '/app/Controllers/AuthController.php';
 require_once __DIR__ . '/app/Middleware/auth.php';
 
-$controller = $_GET['controller'] ?? 'home';
-$action = $_GET['action'] ?? 'index';
+$controller = $_GET['controller'] ?? 'auth';
+$action = $_GET['action'] ?? 'login';
 
 switch ($controller) {
     case 'auth':
