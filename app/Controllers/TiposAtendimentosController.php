@@ -132,6 +132,7 @@ class TiposAtendimentosController
             $stmt->bindValue(':nome', $nome, PDO::PARAM_STR);
             $stmt->bindValue(':descricao', $descricao, PDO::PARAM_STR);
             $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
 
             echo json_encode([

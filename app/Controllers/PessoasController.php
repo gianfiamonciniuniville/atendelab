@@ -153,12 +153,13 @@ class PessoasController
             $stmt->bindValue(':periodo', $periodo, PDO::PARAM_STR);
             $stmt->bindValue(':observacoes', $observacoes, PDO::PARAM_STR);
             $stmt->bindValue(':status', $status, PDO::PARAM_STR);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
             $stmt->execute();
 
             echo json_encode([
                 'message' => 'Pessoa atualizada com sucesso',
                 'pessoa' => [
-                    'id' => $this->pdo->lastInsertId(),
+                    'id' => $id,
                     'nome' => $nome,
                     'documento' => $documento,
                     'telefone' => $telefone,
@@ -171,7 +172,7 @@ class PessoasController
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         } catch (PDOException $e) {
             http_response_code(500);
-            echo json_encode(['error' => 'Erro ao atualizar pessoa.']);
+            echo json_encode(['error' => "Erro ao atualizar pessoa. Ex: {$e->getMessage()}"]);
         }
     }
 
