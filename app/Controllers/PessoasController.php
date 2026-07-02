@@ -14,7 +14,7 @@ class PessoasController
     {
         header('Content-Type: application/json; charset=utf-8');
 
-        $sql = "SELECT id, nome, documento, telefone, curso, periodo, status 
+        $sql = "SELECT id, nome, documento, telefone, email, curso, periodo, observacoes, status 
                 FROM pessoas
                 ORDER BY id DESC";
         $stmt = $this->pdo->query($sql);
@@ -33,7 +33,7 @@ class PessoasController
             return;
         }
 
-        $sql = "SELECT id, nome, documento, telefone, curso, periodo, status 
+        $sql = "SELECT id, nome, documento, telefone, email, curso, periodo, observacoes, status 
                 FROM pessoas
                 WHERE id = :id";
 
@@ -58,10 +58,11 @@ class PessoasController
         $nome = trim($_POST['nome'] ?? '');
         $documento = trim($_POST['documento'] ?? '');
         $telefone = trim($_POST['telefone'] ?? '');
+        $email = trim($_POST['email'] ?? '');
         $curso = trim($_POST['curso'] ?? '');
         $periodo = trim($_POST['periodo'] ?? '');
+        $observacoes = trim($_POST['observacoes'] ?? '');
         $status = $_POST['status'] ?? 'ativo';
-
 
         if ($nome === '' || $documento === '' || $telefone === '') {
             http_response_code(400);
@@ -76,19 +77,21 @@ class PessoasController
         }
 
         try {
-            $sql = "INSERT INTO pessoas (nome, documento, telefone, curso, periodo, status) 
-                    VALUES (:nome, :documento, :telefone, :curso, :periodo, :status)";
+            $sql = "INSERT INTO pessoas (nome, documento, telefone, email, curso, periodo, observacoes, status) 
+                    VALUES (:nome, :documento, :telefone, :email, :curso, :periodo, :observacoes, :status)";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(':nome', $nome, PDO::PARAM_STR);
             $stmt->bindValue(':documento', $documento, PDO::PARAM_STR);
             $stmt->bindValue(':telefone', $telefone, PDO::PARAM_STR);
+            $stmt->bindValue(':email', $email, PDO::PARAM_STR);
             $stmt->bindValue(':curso', $curso, PDO::PARAM_STR);
             $stmt->bindValue(':periodo', $periodo, PDO::PARAM_STR);
+            $stmt->bindValue(':observacoes', $observacoes, PDO::PARAM_STR);
             $stmt->bindValue(':status', $status, PDO::PARAM_STR);
             $stmt->execute();
 
-            http_response_code(201); // 201 Created
+            http_response_code(201);
 
             echo json_encode([
                 'message' => 'Pessoa criada com sucesso',
@@ -97,10 +100,11 @@ class PessoasController
                     'nome' => $nome,
                     'documento' => $documento,
                     'telefone' => $telefone,
+                    'email' => $email,
                     'curso' => $curso,
                     'periodo' => $periodo,
-                    'status' => $status,
-                    'criado_em' => date('Y-m-d H:i:s')
+                    'observacoes' => $observacoes,
+                    'status' => $status
                 ]
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         } catch (PDOException $e) {
@@ -117,8 +121,10 @@ class PessoasController
         $nome = trim($_POST['nome'] ?? '');
         $documento = trim($_POST['documento'] ?? '');
         $telefone = trim($_POST['telefone'] ?? '');
+        $email = trim($_POST['email'] ?? '');
         $curso = trim($_POST['curso'] ?? '');
         $periodo = trim($_POST['periodo'] ?? '');
+        $observacoes = trim($_POST['observacoes'] ?? '');
         $status = $_POST['status'] ?? 'ativo';
 
         if (!$id  || $nome === '' || $documento === '' || $telefone === '') {
@@ -135,15 +141,17 @@ class PessoasController
 
         try {
             $sql = "UPDATE pessoas 
-                    SET nome = :nome, documento = :documento, telefone = :telefone, curso = :curso, periodo = :periodo, status = :status 
+                    SET nome = :nome, documento = :documento, telefone = :telefone, email = :email, curso = :curso, periodo = :periodo, observacoes = :observacoes, status = :status 
                     WHERE id = :id";
 
             $stmt = $this->pdo->prepare($sql);
             $stmt->bindValue(':nome', $nome, PDO::PARAM_STR);
             $stmt->bindValue(':documento', $documento, PDO::PARAM_STR);
             $stmt->bindValue(':telefone', $telefone, PDO::PARAM_STR);
+            $stmt->bindValue(':email', $email, PDO::PARAM_STR);
             $stmt->bindValue(':curso', $curso, PDO::PARAM_STR);
             $stmt->bindValue(':periodo', $periodo, PDO::PARAM_STR);
+            $stmt->bindValue(':observacoes', $observacoes, PDO::PARAM_STR);
             $stmt->bindValue(':status', $status, PDO::PARAM_STR);
             $stmt->execute();
 
@@ -154,10 +162,11 @@ class PessoasController
                     'nome' => $nome,
                     'documento' => $documento,
                     'telefone' => $telefone,
+                    'email' => $email,
                     'curso' => $curso,
                     'periodo' => $periodo,
-                    'status' => $status,
-                    'criado_em' => date('Y-m-d H:i:s')
+                    'observacoes' => $observacoes,
+                    'status' => $status
                 ]
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         } catch (PDOException $e) {
